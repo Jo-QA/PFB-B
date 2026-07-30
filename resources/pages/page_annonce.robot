@@ -17,6 +17,9 @@ ${NOMBRE_MAX_MOIS_CALENDRIER}     12
 ${CHAMP_VOYAGEURS}                xpath=//button[@id="request_for_reservation"]/ancestor::div[contains(@class, "sidebar-booking-module")]//input[@name="guests"]
 ${BOUTON_AJOUTER_ADULTE}          xpath=//button[@id="request_for_reservation"]/ancestor::div[contains(@class, "sidebar-booking-module")]//button[contains(@class, "adult_plus")]
 ${BOUTON_APPLIQUER_VOYAGEURS}     xpath=//button[@id="request_for_reservation"]/ancestor::div[contains(@class, "sidebar-booking-module")]//button[contains(@class, "apply_guests")]
+${CHAMP_MESSAGE_HOTE}             xpath=//button[@id="request_for_reservation"]/ancestor::div[contains(@class, "sidebar-booking-module")]//textarea[contains(@name, "message") or contains(@id, "message")]
+${JOUR_CALENDRIER_PASSE}          css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li.past-day.day-disabled
+${CALENDRIER_ATTENDANT_DEPART}    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar.depart_active
 
 
 *** Keywords ***
@@ -47,6 +50,15 @@ Choisir les dates de réservation
     Click Element    ${date_fin_locator}
     Wait Until Keyword Succeeds    ${DELAI_ATTENTE}    500ms    Element Should Be Enabled    ${BOUTON_DEMANDE_RESERVATION}
 
+Choisir uniquement la date d'arrivée
+    [Arguments]    ${date_debut}
+    ${date_debut_locator}=    Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date_debut}"]
+    Ouvrir le calendrier de la date d'arrivée
+    Atteindre la date dans le calendrier    ${date_debut_locator}
+    Click Element    ${date_debut_locator}
+    Textfield Value Should Be    ${CHAMP_DATE_DEBUT}    ${date_debut}
+    Textfield Value Should Be    ${CHAMP_DATE_FIN}    ${EMPTY}
+
 Ouvrir le calendrier de la date d'arrivée
     Click Element    ${CHAMP_DATE_DEBUT}
     Element Should Be Visible    ${CALENDRIER_RESERVATION}
@@ -74,6 +86,48 @@ Choisir le nombre de voyageurs
     END
     Click Element    ${BOUTON_APPLIQUER_VOYAGEURS}
     Wait Until Keyword Succeeds    ${DELAI_ATTENTE}    500ms    Textfield Value Should Be    ${CHAMP_VOYAGEURS}    ${nombre_voyageurs}
+
+Le champ de message à l'hôte doit être présent et obligatoire
+    Page Should Contain Element    ${CHAMP_MESSAGE_HOTE}
+    ${attribut_requis}=    Get Element Attribute    ${CHAMP_MESSAGE_HOTE}    required
+    Should Be Equal    ${attribut_requis}    required
+
+La date d'arrivée doit être choisie avant la date de départ
+    [Arguments]    ${date}
+    Ouvrir le calendrier de la date de départ
+    ${date_locator}=    Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date}"]
+    Atteindre la date dans le calendrier    ${date_locator}
+    Click Element    ${date_locator}
+    Textfield Value Should Be    ${CHAMP_DATE_DEBUT}    ${date}
+    Textfield Value Should Be    ${CHAMP_DATE_FIN}    ${EMPTY}
+
+Le calendrier doit empêcher la sélection d'une date passée
+    Ouvrir le calendrier de la date d'arrivée
+    Page Should Contain Element    ${JOUR_CALENDRIER_PASSE}
+
+La réservation doit être refusée si la deuxième date est antérieure à la première
+    [Arguments]    ${date_debut}    ${date_fin_invalide}
+    Choisir uniquement la date d'arrivée    ${date_debut}
+    Ouvrir le calendrier de la date de départ
+    ${date_invalide_locator}=    Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date_fin_invalide}"]
+    Atteindre la date dans le calendrier    ${date_invalide_locator}
+    Click Element    ${date_invalide_locator}
+    Wait Until Page Contains    ${MESSAGE_DATE_DEPART_INVALIDE}
+
+La réservation doit être refusée sans date de fin
+    Choisir uniquement la date d'arrivée    ${DATE_DEBUT_CONTROLE_VALIDATION}
+    Element Should Be Visible    ${CALENDRIER_ATTENDANT_DEPART}
+
+La réservation doit être refusée sans voyageur
+    Choisir les dates de réservation    ${DATE_DEBUT_CONTROLE_VALIDATION}    ${DATE_FIN_CONTROLE_VALIDATION}
+    Textfield Value Should Be    ${CHAMP_VOYAGEURS}    ${EMPTY}
+    Demander une réservation
+    Wait Until Page Contains    ${MESSAGE_VOYAGEURS_REQUIS}
+
+Le nombre de voyageurs doit être saisi uniquement avec un nombre entier
+    ${attribut_lecture_seule}=    Get Element Attribute    ${CHAMP_VOYAGEURS}    readonly
+    Should Not Be Empty    ${attribut_lecture_seule}
+    Choisir le nombre de voyageurs    ${NOMBRE_VOYAGEURS}
 
 La réservation doit être confirmée
     Wait Until Page Contains    ${MESSAGE_RESERVATION_ENVOYEE}

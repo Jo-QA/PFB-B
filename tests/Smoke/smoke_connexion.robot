@@ -12,7 +12,7 @@ Resource   ../../resources/pages/page_dashboard_voyageur.robot
 
 Suite Setup       Ouvrir l'application
 Suite Teardown    Fermer l'application
-Test Tags         smoke    connexion
+Test Tags         smoke    connexion    P1
 
 
 *** Test Cases ***

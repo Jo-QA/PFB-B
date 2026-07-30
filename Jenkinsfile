@@ -1,6 +1,14 @@
 pipeline {
     agent any
 
+    parameters {
+        booleanParam(
+            name: 'EXECUTER_TESTS_P2',
+            defaultValue: false,
+            description: 'Lance aussi les scénarios P2, dont le parcours complet qui enregistre un profil bancaire fictif et crée une réservation. Préparer des données de test avant ce lancement.'
+        )
+    }
+
     options {
         skipDefaultCheckout(true)
     }
@@ -29,10 +37,16 @@ pipeline {
 
         stage('Exécuter les tests Robot Framework') {
             steps {
-                bat '''
-                    call .venv\\Scripts\\activate.bat
-                    python -m robot --outputdir results tests
-                '''
+                script {
+                    def optionsRobot = '--include P1 --exclude anomalie_connue'
+                    if (params.EXECUTER_TESTS_P2) {
+                        optionsRobot = '--include P1 --include P2 --exclude anomalie_connue'
+                    }
+                    bat """
+                        call .venv\\Scripts\\activate.bat
+                        python -m robot ${optionsRobot} --outputdir results tests
+                    """
+                }
             }
         }
     }

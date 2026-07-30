@@ -28,13 +28,14 @@ L'objectif est d'automatiser les scénarios de test des User Stories US-07 et US
 | Référence | Priorité | Type de scénario | Vérification automatisée | Résultat attendu |
 | --------- | -------- | ---------------- | ------------------------ | ---------------- |
 | Smoke connexion | Transverse | Smoke test | Un voyageur se connecte avec un compte valide. | Le tableau de bord voyageur est affiché. |
-| US07 | P1 | Cas nominal / happy path | Un voyageur connecté envoie une demande de réservation. | La demande est confirmée par Homey. |
-| US07 | P1 | Cas bloquant / unhappy path | Un visiteur non connecté tente de réserver. | Homey demande une connexion. |
-| US08 | P2 | Cas nominal / happy path | L'hôte confirme une demande envoyée par un voyageur. | Le statut devient `PAIEMENT EN ATTENTE`. |
+| US07 | P1 / P2 | Demande et contrôles de saisie | Message obligatoire, contrôle d'accès, dates et voyageurs. | Les règles simples sont automatisées ; les anomalies connues sont isolées. |
+| US08 | P1 | Sécurité du paiement | Un hôte sans profil de paiement ne peut pas marquer une réservation comme payée. | Anomalie connue, conservée hors Jenkins. |
+| US08 | P2 | Parcours nominal et profil de paiement | Profil bancaire, confirmation, paiement puis statut `RESERVE`. | Le cycle nominal est vérifié côté hôte et voyageur. |
+| US08 | P3 | Annulations et refus | Les cinq branches terminales du schéma de réservation. | Conservées en manuel : préparation et nettoyage de données coûteux. |
 
 Les scénarios US07 et US08 correspondent au périmètre demandé pour le projet de fin de bloc. Le smoke test est conservé comme contrôle rapide de la fonctionnalité de connexion.
 
-La couverture détaillée, incluant les cas d'exception, les transitions de statuts et les anomalies à reproduire, est disponible dans la [matrice de couverture fonctionnelle](documentation/matrice_couverture_tests.md).
+La couverture détaillée, incluant les cas d'exception, les transitions de statuts et les anomalies à reproduire, est disponible dans la [matrice de couverture fonctionnelle](documentation/matrice_couverture_tests.md). La [réconciliation PFB A / PFB B](documentation/reconciliation_pfb_a_pfb_b.md) conserve le lien entre les 17 cas manuels réalisés dans Jira et leur reprise progressive en automatisation.
 
 ## Technologies utilisées
 
@@ -95,9 +96,9 @@ pip install -r requirements.txt
 
 ## Exécution des tests
 
-robot --outputdir results tests/
-robot --outputdir results tests/US07_demande_reservation.robot
-robot --outputdir results tests/US08_traiter_demande_reservation.robot
+robot --include P1 --exclude anomalie_connue --outputdir results tests/
+robot --include P1 --include P2 --exclude anomalie_connue --outputdir results tests/
+robot --include anomalie_connue --outputdir results tests/
 
 ## Intégration continue avec Jenkins
 
@@ -107,12 +108,14 @@ Le pipeline suit les étapes suivantes :
 
 1. Jenkins récupère la dernière version du projet sur GitHub.
 2. Il crée un environnement Python dédié et installe les dépendances.
-3. Il exécute l'ensemble des tests Robot Framework.
+3. Il exécute par défaut les tests P1 non concernés par une anomalie connue.
 4. Il publie les rapports de test et les conserve en pièces jointes du build.
 
 Jenkins vérifie GitHub chaque minute. Lorsqu'un nouveau commit est détecté, un build est lancé automatiquement. Une modification enregistrée uniquement dans VS Code ne déclenche donc pas le pipeline : elle doit d'abord être validée puis envoyée sur GitHub avec un commit et un push.
 
 Le fichier `Jenkinsfile`, présent à la racine du dépôt, décrit ce pipeline. Le versionner avec le projet permet de garder la configuration d'intégration continue lisible, reproductible et traçable.
+
+Le paramètre Jenkins **EXECUTER_TESTS_P2** ajoute les contrôles P2 et le parcours nominal complet. Il doit être activé après avoir préparé des dates libres, car ce parcours crée une demande, enregistre un profil bancaire fictif et marque une réservation comme payée. Les anomalies connues restent exclues du pipeline afin qu'un défaut identifié ne fasse pas échouer chaque build.
 
 ## Résultats
 

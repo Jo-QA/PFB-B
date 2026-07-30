@@ -43,11 +43,21 @@ ${URL_ANNONCE_TEST}         ${URL_ANNONCE_HOTE_TEST}
 # ------------------------------------------------------------
 
 # Le calendrier Homey expose les dates au format AAAA-MM-JJ.
-${DATE_DEBUT}              2026-10-20
-${DATE_FIN}                2026-10-23
-${DATE_DEBUT_US08}         2026-11-05
-${DATE_FIN_US08}           2026-11-08
-${NOMBRE_VOYAGEURS}        2
+# Les deux parcours qui créent une demande utilisent des séjours distincts de trois nuits.
+${DATE_DEBUT_CONFIRMATION_HOTE}             2026-11-10
+${DATE_FIN_CONFIRMATION_HOTE}               2026-11-13
+${DATE_DEBUT_SECURITE_PAIEMENT}             2026-12-20
+${DATE_FIN_SECURITE_PAIEMENT}               2026-12-23
+# Créneau validé lors de la campagne P2. Recréer l'annonce de test avant de le rejouer.
+${DATE_DEBUT_PARCOURS_COMPLET}               2026-12-15
+${DATE_FIN_PARCOURS_COMPLET}                 2026-12-18
+${DATE_DEBUT_CONTROLE_VALIDATION}            2026-10-10
+${DATE_FIN_AVANT_DEBUT_CONTROLE}             2026-10-09
+${DATE_FIN_CONTROLE_VALIDATION}              2026-10-12
+${NOMBRE_VOYAGEURS}                         2
+${IBAN_TEST}                                FR7612345678901234567890123
+${SWIFT_TEST}                               TESTFRPPXXX
+${NOM_BANQUE_TEST}                          Banque de test
 
 
 # ------------------------------------------------------------
@@ -55,5 +65,8 @@ ${NOMBRE_VOYAGEURS}        2
 # ------------------------------------------------------------
 
 ${MESSAGE_RESERVATION_ENVOYEE}    Demande de réservation envoyée.
+${MESSAGE_DATE_DEPART_INVALIDE}    La date de départ doit être supérieure à la date d'arrivée
+${MESSAGE_VOYAGEURS_REQUIS}    Veuillez choisir des voyageurs
 ${MESSAGE_DISPONIBILITE_CONFIRMEE}    Vous avez confirmé la disponibilité pour cette réservation.
 ${STATUT_PAIEMENT_EN_ATTENTE}    PAIEMENT EN ATTENTE
+${STATUT_RESERVE}                RÉSERVÉ
