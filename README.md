@@ -86,6 +86,21 @@ robot --outputdir results tests/
 robot --outputdir results tests/US07_demande_reservation.robot
 robot --outputdir results tests/US08_traiter_demande_reservation.robot
 
+## Intégration continue avec Jenkins
+
+Le projet est exécuté automatiquement par le job Jenkins **Pipeline-tests-automatises-PFB-B**.
+
+Le pipeline suit les étapes suivantes :
+
+1. Jenkins récupère la dernière version du projet sur GitHub.
+2. Il crée un environnement Python dédié et installe les dépendances.
+3. Il exécute l'ensemble des tests Robot Framework.
+4. Il publie les rapports de test et les conserve en pièces jointes du build.
+
+Jenkins vérifie GitHub chaque minute. Lorsqu'un nouveau commit est détecté, un build est lancé automatiquement. Une modification enregistrée uniquement dans VS Code ne déclenche donc pas le pipeline : elle doit d'abord être validée puis envoyée sur GitHub avec un commit et un push.
+
+Le fichier `Jenkinsfile`, présent à la racine du dépôt, décrit ce pipeline. Le versionner avec le projet permet de garder la configuration d'intégration continue lisible, reproductible et traçable.
+
 ## Résultats
 
 Les rapports générés après chaque exécution sont disponibles dans le dossier results/ :
@@ -93,6 +108,8 @@ Les rapports générés après chaque exécution sont disponibles dans le dossie
 - **report.html** : résumé des tests exécutés.
 - **log.html** : détail de chaque étape.
 - **output.xml** : résultats XML utilisés par Jenkins.
+
+Dans Jenkins, le lien **Robot Results** d'un build permet de consulter la synthèse des tests, tandis que les fichiers `report.html` et `log.html` sont disponibles dans les artefacts archivés.
 
 ## Auteur
 
