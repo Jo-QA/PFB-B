@@ -34,8 +34,8 @@ ${HOTE_PASSWORD}           HoteMDP1
 # Données d'annonce
 # ------------------------------------------------------------
 
-${URL_ANNONCE_TEST}    http://livraison3.testacademy.fr/index.php/listing/hub-haymarket/
 ${URL_ANNONCE_HOTE_TEST}    http://livraison3.testacademy.fr/index.php/listing/maison-de-test-place-de-letoile-paris/
+${URL_ANNONCE_TEST}         ${URL_ANNONCE_HOTE_TEST}
 
 
 # ------------------------------------------------------------
@@ -45,8 +45,8 @@ ${URL_ANNONCE_HOTE_TEST}    http://livraison3.testacademy.fr/index.php/listing/m
 # Le calendrier Homey expose les dates au format AAAA-MM-JJ.
 ${DATE_DEBUT}              2026-10-20
 ${DATE_FIN}                2026-10-22
-${DATE_DEBUT_US08}         2026-10-25
-${DATE_FIN_US08}           2026-10-27
+${DATE_DEBUT_US08}         2026-11-05
+${DATE_FIN_US08}           2026-11-07
 ${NOMBRE_VOYAGEURS}        2
 ${MESSAGE_RESERVATION}     Bonjour, je souhaite réserver ce logement.
 
