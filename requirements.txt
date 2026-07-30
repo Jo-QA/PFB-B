@@ -1,0 +1,8 @@
+# ============================================================
+# Projet de Fin de Bloc B - Homey
+# Dépendances Python
+# ============================================================
+
+robotframework==7.4.2
+robotframework-seleniumlibrary==6.9.0
+selenium==4.45.0
