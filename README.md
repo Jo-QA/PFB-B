@@ -75,8 +75,8 @@ Cette architecture permet de séparer :
 ## Installation
 
 ```bash
-git clone ...
-cd ...
+git clone https://github.com/Jo-QA/PFB-B.git
+cd PFB-B
 pip install -r requirements.txt
 ```
 
