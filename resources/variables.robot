@@ -43,10 +43,10 @@ ${URL_ANNONCE_HOTE_TEST}    http://livraison3.testacademy.fr/index.php/listing/m
 # ------------------------------------------------------------
 
 # Le calendrier Homey expose les dates au format AAAA-MM-JJ.
-${DATE_DEBUT}              2026-10-10
-${DATE_FIN}                2026-10-12
-${DATE_DEBUT_US08}         2026-10-15
-${DATE_FIN_US08}           2026-10-17
+${DATE_DEBUT}              2026-10-20
+${DATE_FIN}                2026-10-22
+${DATE_DEBUT_US08}         2026-10-25
+${DATE_FIN_US08}           2026-10-27
 ${NOMBRE_VOYAGEURS}        2
 ${MESSAGE_RESERVATION}     Bonjour, je souhaite réserver ce logement.
 
