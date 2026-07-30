@@ -23,6 +23,17 @@ L'objectif est d'automatiser les scénarios de test des User Stories US-07 et US
 - Versionner le projet avec GitHub
 - Exécuter automatiquement les tests via Jenkins
 
+## Couverture des tests
+
+| Référence | Priorité | Type de scénario | Vérification automatisée | Résultat attendu |
+| --------- | -------- | ---------------- | ------------------------ | ---------------- |
+| Smoke connexion | Transverse | Smoke test | Un voyageur se connecte avec un compte valide. | Le tableau de bord voyageur est affiché. |
+| US07 | P1 | Cas nominal / happy path | Un voyageur connecté envoie une demande de réservation. | La demande est confirmée par Homey. |
+| US07 | P1 | Cas bloquant / unhappy path | Un visiteur non connecté tente de réserver. | Homey demande une connexion. |
+| US08 | P2 | Cas nominal / happy path | L'hôte confirme une demande envoyée par un voyageur. | Le statut devient `PAIEMENT EN ATTENTE`. |
+
+Les scénarios US07 et US08 correspondent au périmètre demandé pour le projet de fin de bloc. Le smoke test est conservé comme contrôle rapide de la fonctionnalité de connexion.
+
 ## Technologies utilisées
 
 | Technologie        | Rôle                         |
