@@ -44,9 +44,9 @@ ${URL_ANNONCE_TEST}         ${URL_ANNONCE_HOTE_TEST}
 
 # Le calendrier Homey expose les dates au format AAAA-MM-JJ.
 ${DATE_DEBUT}              2026-10-20
-${DATE_FIN}                2026-10-22
+${DATE_FIN}                2026-10-23
 ${DATE_DEBUT_US08}         2026-11-05
-${DATE_FIN_US08}           2026-11-07
+${DATE_FIN_US08}           2026-11-08
 ${NOMBRE_VOYAGEURS}        2
 
 
