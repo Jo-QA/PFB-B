@@ -34,6 +34,8 @@ L'objectif est d'automatiser les scénarios de test des User Stories US-07 et US
 
 Les scénarios US07 et US08 correspondent au périmètre demandé pour le projet de fin de bloc. Le smoke test est conservé comme contrôle rapide de la fonctionnalité de connexion.
 
+La couverture détaillée, incluant les cas d'exception, les transitions de statuts et les anomalies à reproduire, est disponible dans la [matrice de couverture fonctionnelle](documentation/matrice_couverture_tests.md).
+
 ## Technologies utilisées
 
 | Technologie        | Rôle                         |
