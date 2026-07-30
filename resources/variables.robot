@@ -48,7 +48,6 @@ ${DATE_FIN}                2026-10-22
 ${DATE_DEBUT_US08}         2026-11-05
 ${DATE_FIN_US08}           2026-11-07
 ${NOMBRE_VOYAGEURS}        2
-${MESSAGE_RESERVATION}     Bonjour, je souhaite réserver ce logement.
 
 
 # ------------------------------------------------------------

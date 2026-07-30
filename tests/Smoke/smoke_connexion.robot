@@ -6,8 +6,6 @@
 
 *** Settings ***
 
-Library    SeleniumLibrary
-
 Resource   ../../resources/variables.robot
 Resource   ../../resources/common_keywords.robot
 Resource   ../../resources/pages/page_dashboard_voyageur.robot
