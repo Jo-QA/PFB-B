@@ -12,13 +12,13 @@ ${MESSAGE_LOGIN_REQUIS}           Vous devez vous connecter pour effectuer une r
 ${CHAMP_DATE_DEBUT}               css=.sidebar-booking-module.hidden-sm.hidden-xs #single-listing-date-range input[name="arrive"]
 ${CHAMP_DATE_FIN}                 css=.sidebar-booking-module.hidden-sm.hidden-xs #single-listing-date-range input[name="depart"]
 ${CALENDRIER_RESERVATION}         css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar
+${BOUTON_MOIS_PRECEDENT}          css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar .listing-cal-prev
 ${BOUTON_MOIS_SUIVANT}            css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar .listing-cal-next
 ${NOMBRE_MAX_MOIS_CALENDRIER}     12
 ${CHAMP_VOYAGEURS}                xpath=//button[@id="request_for_reservation"]/ancestor::div[contains(@class, "sidebar-booking-module")]//input[@name="guests"]
 ${BOUTON_AJOUTER_ADULTE}          xpath=//button[@id="request_for_reservation"]/ancestor::div[contains(@class, "sidebar-booking-module")]//button[contains(@class, "adult_plus")]
 ${BOUTON_APPLIQUER_VOYAGEURS}     xpath=//button[@id="request_for_reservation"]/ancestor::div[contains(@class, "sidebar-booking-module")]//button[contains(@class, "apply_guests")]
 ${CHAMP_MESSAGE_HOTE}             xpath=//button[@id="request_for_reservation"]/ancestor::div[contains(@class, "sidebar-booking-module")]//textarea[contains(@name, "message") or contains(@id, "message")]
-${JOUR_CALENDRIER_PASSE}          css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li.past-day.day-disabled
 ${CALENDRIER_ATTENDANT_DEPART}    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar.depart_active
 
 
@@ -103,7 +103,8 @@ La date d'arrivée doit être choisie avant la date de départ
 
 Le calendrier doit empêcher la sélection d'une date passée
     Ouvrir le calendrier de la date d'arrivée
-    Page Should Contain Element    ${JOUR_CALENDRIER_PASSE}
+    ${classes_bouton_precedent}=    Get Element Attribute    ${BOUTON_MOIS_PRECEDENT}    class
+    Should Contain    ${classes_bouton_precedent}    disabled
 
 La réservation doit être refusée si la deuxième date est antérieure à la première
     [Arguments]    ${date_debut}    ${date_fin_invalide}

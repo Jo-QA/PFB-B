@@ -23,7 +23,7 @@ Le but n'est pas de transformer mécaniquement chaque ligne Jira en script. Le c
 | CT01 | Demande complète avec message à l'hôte. | P1 | Automatisé, anomalie connue. | Le message est une exigence du cahier des charges. Le test vérifie que le champ existe et est obligatoire. |
 | CT02 | Visiteur non connecté. | P1 | Automatisé dans Jenkins. | Contrôle d'accès critique, stable et sans donnée persistante. |
 | CT03 | Date de début vide. | P2 | Automatisé. | Le calendrier doit imposer l'arrivée avant le départ ; le contrôle est simple et sans réservation créée. |
-| CT04 | Date de début passée. | P2 | Automatisé. | Une date passée doit être indisponible dans le calendrier. |
+| CT04 | Date de début passée. | P2 | Automatisé. | Le script vérifie que Homey désactive la navigation vers le mois précédent. Cette règle empêche la sélection d'une date passée, y compris le premier jour du mois. |
 | CT05 | Date de fin vide. | P2 | Automatisé + preuve manuelle. | Le script vérifie l'état « attente de départ » du calendrier ; le message de validation est confirmé manuellement, car le calendrier recouvre le bouton tant qu'une deuxième date est attendue. |
 | CT06 | Date de fin égale ou antérieure au début. | P2 | Automatisé. | La deuxième date choisie est la date de départ ; Homey doit refuser un séjour de durée négative. |
 | CT07 | Nombre de voyageurs vide. | P2 | Automatisé. | Homey doit refuser la demande et afficher le message indiquant qu'un voyageur est requis. |

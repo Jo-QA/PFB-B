@@ -49,8 +49,8 @@ ${DATE_FIN_CONFIRMATION_HOTE}               2026-11-13
 ${DATE_DEBUT_SECURITE_PAIEMENT}             2026-12-20
 ${DATE_FIN_SECURITE_PAIEMENT}               2026-12-23
 # Créneau validé lors de la campagne P2. Recréer l'annonce de test avant de le rejouer.
-${DATE_DEBUT_PARCOURS_COMPLET}               2026-12-15
-${DATE_FIN_PARCOURS_COMPLET}                 2026-12-18
+${DATE_DEBUT_PARCOURS_COMPLET}               2026-12-25
+${DATE_FIN_PARCOURS_COMPLET}                 2026-12-28
 ${DATE_DEBUT_CONTROLE_VALIDATION}            2026-10-10
 ${DATE_FIN_AVANT_DEBUT_CONTROLE}             2026-10-09
 ${DATE_FIN_CONTROLE_VALIDATION}              2026-10-12
