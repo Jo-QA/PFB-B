@@ -5,7 +5,8 @@
 
 *** Settings ***
 
-Library    SeleniumLibrary
+Library       Collections
+Library       SeleniumLibrary
 
 Resource    ../variables.robot
 
@@ -54,6 +55,46 @@ Choisir les dates de réservation
     Atteindre la date dans le calendrier    ${locator_date_fin}
     Click Element    ${locator_date_fin}
     Wait Until Keyword Succeeds    ${DELAI_ATTENTE}    500ms    Element Should Be Enabled    ${BOUTON_DEMANDE_RESERVATION}
+
+Trouver un séjour disponible
+    [Arguments]    ${nombre_nuits}    ${delai_minimum}
+    Ouvrir le calendrier de la date d'arrivée
+    FOR    ${indice}    IN RANGE    ${NOMBRE_MAX_MOIS_CALENDRIER}
+        ${sejour_disponible}=    Rechercher un séjour disponible dans les mois affichés    ${nombre_nuits}    ${delai_minimum}
+        ${sejour_trouve}=    Run Keyword And Return Status    Should Not Contain    ${sejour_disponible}    ${None}
+        IF    ${sejour_trouve}
+            ${date_debut}=    Get From List    ${sejour_disponible}    0
+            ${date_fin}=      Get From List    ${sejour_disponible}    1
+            RETURN    ${date_debut}    ${date_fin}
+        END
+        ${classes_bouton_suivant}=    Get Element Attribute    ${BOUTON_MOIS_SUIVANT}    class
+        ${mois_suivant_est_accessible}=    Run Keyword And Return Status    Should Not Contain    ${classes_bouton_suivant}    disabled
+        Exit For Loop If    not ${mois_suivant_est_accessible}
+        Click Element    ${BOUTON_MOIS_SUIVANT}
+    END
+    Fail    Aucun séjour disponible de ${nombre_nuits} nuits à partir de J+${delai_minimum} n'a été trouvé dans les ${NOMBRE_MAX_MOIS_CALENDRIER} prochains mois.
+
+Rechercher un séjour disponible dans les mois affichés
+    [Arguments]    ${nombre_nuits}    ${delai_minimum}
+    ${script_recherche}=    Catenate    SEPARATOR=\n
+    ...    return (() => {
+    ...        const selecteur = '.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date]';
+    ...        const joursDisponibles = new Set(Array.from(document.querySelectorAll(selecteur)).filter(element => element.classList.contains('day-available') && element.classList.contains('future-day')).map(element => element.dataset.formattedDate));
+    ...        const dates = Array.from(joursDisponibles).sort();
+    ...        const nombreNuits = ${nombre_nuits};
+    ...        const dateMinimum = new Date();
+    ...        dateMinimum.setUTCHours(12, 0, 0, 0);
+    ...        dateMinimum.setUTCDate(dateMinimum.getUTCDate() + ${delai_minimum});
+    ...        const dateMinimumFormatee = dateMinimum.toISOString().slice(0, 10);
+    ...        for (const dateDebut of dates) {
+    ...            if (dateDebut < dateMinimumFormatee) continue;
+    ...            const joursDuSejour = Array.from({ length: nombreNuits + 1 }, (_, indice) => { const date = new Date(`\${dateDebut}T12:00:00Z`); date.setUTCDate(date.getUTCDate() + indice); return date.toISOString().slice(0, 10); });
+    ...            if (joursDuSejour.every(date => joursDisponibles.has(date))) return [joursDuSejour[0], joursDuSejour[joursDuSejour.length - 1]];
+    ...        }
+    ...        return null;
+    ...    })();
+    ${sejour_disponible}=    Execute JavaScript    ${script_recherche}
+    RETURN    ${sejour_disponible}
 
 Choisir uniquement la date d'arrivée
     [Arguments]    ${date_debut}

@@ -98,7 +98,7 @@ python -m robot --include P1 --include P2 --exclude anomalie_connue --outputdir 
 python -m robot --include anomalie_connue --outputdir results tests/
 ```
 
-Les scénarios P2 qui créent une réservation demandent des dates libres. Les anomalies connues sont volontairement isolées : elles démontrent un écart au cahier des charges sans faire échouer le pipeline quotidien.
+Le parcours nominal P2 recherche automatiquement le premier séjour disponible de trois nuits à partir de J+2 dans le calendrier de l'annonce de test. Les anomalies connues sont volontairement isolées : elles démontrent un écart au cahier des charges sans faire échouer le pipeline quotidien.
 
 ## Lancer Jenkins en local
 
@@ -122,7 +122,7 @@ Le job Jenkins récupère la dernière version du dépôt GitHub, crée un envir
 
 Par défaut, il lance les P1 hors anomalies connues : le smoke test de connexion et le contrôle d'accès US07. Lorsqu'un nouveau commit est détecté sur GitHub, Jenkins lance automatiquement ce contrôle rapide.
 
-Le paramètre `EXECUTER_TESTS_P2` ajoute les contrôles P2 et le parcours nominal complet. Il doit être activé après avoir préparé des dates libres, car ce parcours crée une demande, enregistre un profil bancaire fictif et marque une réservation comme payée.
+Le paramètre `EXECUTER_TESTS_P2` ajoute les contrôles P2 et le parcours nominal complet. Celui-ci sélectionne automatiquement un séjour disponible de trois nuits à partir de J+2, crée une demande, enregistre un profil bancaire fictif et marque la réservation comme payée.
 
 Une modification enregistrée seulement dans Visual Studio Code ne déclenche pas Jenkins. Elle doit être enregistrée dans Git, puis envoyée sur GitHub avec un commit et un push.
 

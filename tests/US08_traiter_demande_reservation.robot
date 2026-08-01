@@ -45,11 +45,12 @@ P2 - L'hôte doit pouvoir configurer un virement bancaire de test
     Les champs du virement bancaire doivent être affichés
 
 P2 - Une réservation doit atteindre le statut réservé après paiement
-    [Documentation]    US08-CT01 / HOMEY-23. Le parcours passe de NOUVEAU à PAIEMENT EN ATTENTE, puis à RÉSERVÉ après le paiement.
+    [Documentation]    US08-CT01 / HOMEY-23. Le script choisit un séjour disponible de trois nuits à partir de J+2, puis vérifie le passage de NOUVEAU à PAIEMENT EN ATTENTE et à RÉSERVÉ.
     [Tags]    P2    connecte    happy_path    etat_mutable
     Se connecter avec un compte valide    ${UTILISATEUR_LOGIN}    ${UTILISATEUR_PASSWORD}
     Ouvrir l'annonce de l'hôte de test
-    Choisir les dates de réservation    ${DATE_DEBUT_PARCOURS_COMPLET}    ${DATE_FIN_PARCOURS_COMPLET}
+    ${date_debut}    ${date_fin}=    Trouver un séjour disponible    ${DUREE_SEJOUR_P2}    ${DELAI_MINIMUM_AVANT_SEJOUR_P2}
+    Choisir les dates de réservation    ${date_debut}    ${date_fin}
     Choisir le nombre de voyageurs    ${NOMBRE_VOYAGEURS}
     Demander une réservation
     La réservation doit être confirmée
@@ -58,13 +59,13 @@ P2 - Une réservation doit atteindre le statut réservé après paiement
     Se connecter avec un compte valide    ${HOTE_LOGIN}    ${HOTE_PASSWORD}
     Ouvrir le profil de paiement
     Configurer un virement bancaire de test
-    Ouvrir la demande de réservation à confirmer    ${DATE_DEBUT_PARCOURS_COMPLET}
+    Ouvrir la demande de réservation à confirmer    ${date_debut}
     Confirmer la disponibilité de la réservation
-    Le statut de paiement en attente doit être affiché    ${DATE_DEBUT_PARCOURS_COMPLET}
-    Ouvrir le détail d'une réservation au paiement en attente    ${DATE_DEBUT_PARCOURS_COMPLET}
+    Le statut de paiement en attente doit être affiché    ${date_debut}
+    Ouvrir le détail d'une réservation au paiement en attente    ${date_debut}
     Marquer la réservation comme payée
-    Le statut réservé doit être affiché    ${DATE_DEBUT_PARCOURS_COMPLET}
+    Le statut réservé doit être affiché    ${date_debut}
     Fermer l'application
     Ouvrir l'application
     Se connecter avec un compte valide    ${UTILISATEUR_LOGIN}    ${UTILISATEUR_PASSWORD}
-    Le statut réservé doit être affiché    ${DATE_DEBUT_PARCOURS_COMPLET}
+    Le statut réservé doit être affiché    ${date_debut}

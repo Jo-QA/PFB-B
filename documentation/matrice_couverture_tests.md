@@ -13,7 +13,7 @@ Le but n'est pas de transformer mécaniquement chaque ligne Jira en script. Le c
 | Priorité | Règle appliquée | Décision d'exécution |
 | --- | --- | --- |
 | P1 | Risque fort sur une exigence obligatoire, le contrôle d'accès ou la sécurité du paiement. | Automatisé systématiquement. Une anomalie connue reste automatisée, mais est isolée du pipeline vert. |
-| P2 | Règle de validation ou parcours métier utile dont l'automatisation est simple et durable. | Automatisé. Les scénarios qui créent une réservation ou enregistrent un profil sont lancés volontairement avec des données de test préparées. |
+| P2 | Règle de validation ou parcours métier utile dont l'automatisation est simple et durable. | Automatisé. Le parcours de réservation choisit automatiquement un séjour disponible ; l'enregistrement du profil de paiement reste une donnée fictive persistante. |
 | P3 | Branche de réservation imposant de créer et de nettoyer plusieurs statuts intermédiaires. | Conservé en manuel : la preuve PFB A reste traçable. Le coût de maintenance est supérieur au bénéfice dans ce périmètre. |
 
 ## US07 — Faire une demande de réservation
@@ -36,7 +36,7 @@ Les neuf cas US07 sont donc couverts par huit scénarios Robot : CT01 et CT09 pa
 
 | ID | Cas issu du PFB A | Priorité | Choix PFB B | Justification |
 | --- | --- | --- | --- | --- |
-| CT01 | Parcours nominal complet jusqu'au statut `RESERVE`. | P2 | Automatisé. | Le script vérifie les transitions `NOUVEAU` → `PAIEMENT EN ATTENTE` → `RESERVE` ; l'interface affiche ce dernier statut sous la forme `RÉSERVÉ`, côté hôte et voyageur. |
+| CT01 | Parcours nominal complet jusqu'au statut `RESERVE`. | P2 | Automatisé. | Le script choisit un séjour disponible de trois nuits à partir de J+2 et vérifie les transitions `NOUVEAU` → `PAIEMENT EN ATTENTE` → `RESERVE` ; l'interface affiche ce dernier statut sous la forme `RÉSERVÉ`, côté hôte et voyageur. |
 | CT02 | Annulation directe. | P3 | Manuel. | La branche nécessite une demande au statut `NOUVEAU`, une action voyageur et le contrôle sur deux espaces. |
 | CT03 | Refus direct avec motif. | P3 | Manuel. | Même état initial que CT02, avec en plus le motif de refus à préparer et à contrôler. |
 | CT04 | Annulation avant paiement. | P3 | Manuel. | Préparation d'une demande confirmée mais non payée ; données persistantes et remise à zéro coûteuse. |
@@ -59,7 +59,7 @@ Le test de sécurité du paiement doit être lancé avant le parcours nominal P2
 ## Jenkins et exécution
 
 1. Jenkins exécute à chaque mise à jour les P1 non marqués `anomalie_connue` : smoke connexion et contrôle d'accès US07.
-2. Le paramètre `EXECUTER_TESTS_P2` ajoute les contrôles P2 verts et les scénarios P2 à données persistantes.
+2. Le paramètre `EXECUTER_TESTS_P2` ajoute les contrôles P2 verts et les scénarios P2 à données persistantes ; le séjour est choisi automatiquement parmi les dates disponibles.
 3. Les anomalies connues sont exécutables séparément pour démontrer les défauts, sans faire échouer le pipeline quotidien.
 4. Les P3 sont rejoués manuellement à partir des preuves Jira du PFB A lorsque l'on souhaite revoir une branche d'annulation ou de refus.
 
