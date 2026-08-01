@@ -1,24 +1,21 @@
 # ============================================================
-# Projet de Fin de Bloc B - Homey
-# Page Object - Réservations
+# Projet de Fin de Bloc B — Homey
+# Page Object — Réservations hôte et voyageur
 # ============================================================
-
 
 *** Settings ***
 
-Library    SeleniumLibrary
+Library     SeleniumLibrary
 
 Resource    ../variables.robot
 
-
 *** Variables ***
 
-${URL_RESERVATIONS}                  ${URL}index.php/reservations/
-${STATUT_DEMANDE_NOUVELLE}           NOUVEAU
-${BOUTON_CONFIRMER_DISPONIBILITE}    xpath=//button[contains(@class, "confirm-offsite-reservation") and not(contains(@class, "btn-half-width"))]
-${BOUTON_MARQUER_COMME_PAYE}         css=a.mark-as-paid
-${BOUTON_CONFIRMER_PAIEMENT}         xpath=//button[normalize-space()="Confirmer"]
-
+${URL_RESERVATIONS}                   ${URL}index.php/reservations/
+${STATUT_DEMANDE_NOUVELLE}            NOUVEAU
+${BOUTON_CONFIRMER_DISPONIBILITE}     xpath=//button[contains(@class, "confirm-offsite-reservation") and not(contains(@class, "btn-half-width"))]
+${BOUTON_MARQUER_COMME_PAYE}          css=a.mark-as-paid
+${BOUTON_CONFIRMER_PAIEMENT}          xpath=//button[normalize-space()="Confirmer"]
 
 *** Keywords ***
 

@@ -1,20 +1,17 @@
 # ============================================================
-# Projet de Fin de Bloc B - Homey
-# Page Object - Accueil
+# Projet de Fin de Bloc B — Homey
+# Page Object — Page d'accueil
 # ============================================================
-
 
 *** Settings ***
 
 Library    SeleniumLibrary
-
 
 *** Variables ***
 
 ${ENTETE_BUREAU}    css=#homey_nav_sticky
 ${BOUTON_LOGIN}     css=#homey_nav_sticky a[data-target="#modal-login"]
 ${MODALE_LOGIN}     css=#modal-login
-
 
 *** Keywords ***
 

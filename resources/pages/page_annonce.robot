@@ -1,3 +1,8 @@
+# ============================================================
+# Projet de Fin de Bloc B — Homey
+# Page Object — Page d'annonce
+# ============================================================
+
 *** Settings ***
 
 Library    SeleniumLibrary
@@ -40,22 +45,22 @@ La connexion doit être requise pour réserver
 
 Choisir les dates de réservation
     [Arguments]    ${date_debut}    ${date_fin}
-    ${date_debut_locator}=    Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date_debut}"]
-    ${date_fin_locator}=      Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date_fin}"]
+    ${locator_date_debut}=    Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date_debut}"]
+    ${locator_date_fin}=      Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date_fin}"]
     Wait Until Keyword Succeeds    ${DELAI_ATTENTE}    500ms    Ouvrir le calendrier de la date d'arrivée
-    Atteindre la date dans le calendrier    ${date_debut_locator}
-    Click Element    ${date_debut_locator}
+    Atteindre la date dans le calendrier    ${locator_date_debut}
+    Click Element    ${locator_date_debut}
     Wait Until Keyword Succeeds    ${DELAI_ATTENTE}    500ms    Ouvrir le calendrier de la date de départ
-    Atteindre la date dans le calendrier    ${date_fin_locator}
-    Click Element    ${date_fin_locator}
+    Atteindre la date dans le calendrier    ${locator_date_fin}
+    Click Element    ${locator_date_fin}
     Wait Until Keyword Succeeds    ${DELAI_ATTENTE}    500ms    Element Should Be Enabled    ${BOUTON_DEMANDE_RESERVATION}
 
 Choisir uniquement la date d'arrivée
     [Arguments]    ${date_debut}
-    ${date_debut_locator}=    Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date_debut}"]
+    ${locator_date_debut}=    Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date_debut}"]
     Ouvrir le calendrier de la date d'arrivée
-    Atteindre la date dans le calendrier    ${date_debut_locator}
-    Click Element    ${date_debut_locator}
+    Atteindre la date dans le calendrier    ${locator_date_debut}
+    Click Element    ${locator_date_debut}
     Textfield Value Should Be    ${CHAMP_DATE_DEBUT}    ${date_debut}
     Textfield Value Should Be    ${CHAMP_DATE_FIN}    ${EMPTY}
 
@@ -68,14 +73,14 @@ Ouvrir le calendrier de la date de départ
     Element Should Be Visible    ${CALENDRIER_RESERVATION}
 
 Atteindre la date dans le calendrier
-    [Arguments]    ${date_locator}
+    [Arguments]    ${locator_date}
     FOR    ${indice}    IN RANGE    ${NOMBRE_MAX_MOIS_CALENDRIER}
-        ${date_est_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${date_locator}
+        ${date_est_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${locator_date}
         Exit For Loop If    ${date_est_visible}
         Element Should Be Enabled    ${BOUTON_MOIS_SUIVANT}
         Click Element    ${BOUTON_MOIS_SUIVANT}
     END
-    Element Should Be Visible    ${date_locator}
+    Element Should Be Visible    ${locator_date}
 
 Choisir le nombre de voyageurs
     [Arguments]    ${nombre_voyageurs}
@@ -95,9 +100,9 @@ Le champ de message à l'hôte doit être présent et obligatoire
 La date d'arrivée doit être choisie avant la date de départ
     [Arguments]    ${date}
     Ouvrir le calendrier de la date de départ
-    ${date_locator}=    Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date}"]
-    Atteindre la date dans le calendrier    ${date_locator}
-    Click Element    ${date_locator}
+    ${locator_date}=    Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date}"]
+    Atteindre la date dans le calendrier    ${locator_date}
+    Click Element    ${locator_date}
     Textfield Value Should Be    ${CHAMP_DATE_DEBUT}    ${date}
     Textfield Value Should Be    ${CHAMP_DATE_FIN}    ${EMPTY}
 
@@ -110,9 +115,9 @@ La réservation doit être refusée si la deuxième date est antérieure à la p
     [Arguments]    ${date_debut}    ${date_fin_invalide}
     Choisir uniquement la date d'arrivée    ${date_debut}
     Ouvrir le calendrier de la date de départ
-    ${date_invalide_locator}=    Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date_fin_invalide}"]
-    Atteindre la date dans le calendrier    ${date_invalide_locator}
-    Click Element    ${date_invalide_locator}
+    ${locator_date_invalide}=    Set Variable    css=.sidebar-booking-module.hidden-sm.hidden-xs #single-booking-search-calendar li[data-formatted-date="${date_fin_invalide}"]
+    Atteindre la date dans le calendrier    ${locator_date_invalide}
+    Click Element    ${locator_date_invalide}
     Wait Until Page Contains    ${MESSAGE_DATE_DEPART_INVALIDE}
 
 La réservation doit être refusée sans date de fin

@@ -1,139 +1,149 @@
-# Projet de Fin de Bloc B – Automatisation des tests de l'application Homey
+# Projet de Fin de Bloc B — Automatisation des tests Homey
 
-Ce dépôt contient les scripts d'automatisation réalisés dans le cadre du Projet de Fin de Bloc B de la formation Testeur Logiciel.
-L'objectif est d'automatiser les scénarios de test des User Stories US-07 et US-08 de l'application Homey à l'aide de Robot Framework et SeleniumLibrary, puis d'intégrer leur exécution dans un pipeline d'intégration continue avec Jenkins.
+Ce dépôt contient l'automatisation des tests des User Stories **US07 — Faire une demande de réservation** et **US08 — Traiter une demande de réservation** de l'application Homey.
 
-## Sommaire
-
-- Présentation
-- Objectifs
-- Technologies utilisées
-- Architecture
-- Prérequis
-- Installation
-- Exécution des tests
-- Résultats
-- Auteur
+Le projet utilise Robot Framework, SeleniumLibrary, une architecture Page Object Model (POM), GitHub et Jenkins. Il reprend les cas manuels du PFB A et explique lesquels sont automatisés selon une stratégie P1 / P2 / P3.
 
 ## Objectifs
 
-- Automatiser les User Stories US-07 et US-08
-- Utiliser Robot Framework
-- Structurer le projet selon le Page Object Model
-- Versionner le projet avec GitHub
-- Exécuter automatiquement les tests via Jenkins
+- Automatiser les scénarios prioritaires des US07 et US08.
+- Organiser les scripts avec le modèle Page Object Model.
+- Centraliser les données de test et les mots-clés communs.
+- Conserver la traçabilité entre les tests manuels du PFB A et les scripts Robot.
+- Exécuter automatiquement les tests avec Jenkins.
 
 ## Couverture des tests
 
-| Référence | Priorité | Type de scénario | Vérification automatisée | Résultat attendu |
-| --------- | -------- | ---------------- | ------------------------ | ---------------- |
-| Smoke connexion | Transverse | Smoke test | Un voyageur se connecte avec un compte valide. | Le tableau de bord voyageur est affiché. |
-| US07 | P1 / P2 | Demande et contrôles de saisie | Message obligatoire, contrôle d'accès, dates et voyageurs. | Les règles simples sont automatisées ; les anomalies connues sont isolées. |
-| US08 | P1 | Sécurité du paiement | Un hôte sans profil de paiement ne peut pas marquer une réservation comme payée. | Anomalie connue, conservée hors Jenkins. |
-| US08 | P2 | Parcours nominal et profil de paiement | Profil bancaire, confirmation, paiement puis statut `RESERVE`. | Le cycle nominal est vérifié côté hôte et voyageur. |
-| US08 | P3 | Annulations et refus | Les cinq branches terminales du schéma de réservation. | Conservées en manuel : préparation et nettoyage de données coûteux. |
+| Périmètre | Priorité | Vérification automatisée | Décision |
+| --- | --- | --- | --- |
+| Connexion | Transverse | Un voyageur se connecte avec un compte valide. | Smoke test rapide. |
+| US07 | P1 / P2 | Accès, message à l'hôte, dates et voyageurs. | Contrôles simples automatisés ; anomalies connues isolées. |
+| US08 | P1 | Paiement sans profil hôte. | Anomalie connue, exécutable séparément. |
+| US08 | P2 | Profil bancaire et parcours nominal jusqu'à `RÉSERVÉ`. | Automatisé avec des données de test préparées. |
+| US08 | P3 | Annulations et refus. | Conservés en manuel : préparation et nettoyage trop coûteux. |
 
-Les scénarios US07 et US08 correspondent au périmètre demandé pour le projet de fin de bloc. Le smoke test est conservé comme contrôle rapide de la fonctionnalité de connexion.
-
-La couverture détaillée, incluant les cas d'exception, les transitions de statuts et les anomalies à reproduire, est disponible dans la [matrice de couverture fonctionnelle](documentation/matrice_couverture_tests.md). La [réconciliation PFB A / PFB B](documentation/reconciliation_pfb_a_pfb_b.md) conserve le lien entre les 17 cas manuels réalisés dans Jira et leur reprise progressive en automatisation.
+La [matrice de couverture fonctionnelle](documentation/matrice_couverture_tests.md) détaille les 17 cas manuels du PFB A, leur priorité et leur décision d'automatisation. La [réconciliation PFB A / PFB B](documentation/reconciliation_pfb_a_pfb_b.md) fait le lien avec les références Jira.
 
 ## Technologies utilisées
 
-| Technologie        | Rôle                         |
-| ------------------ | ---------------------------- |
-| Python             | Langage d'exécution          |
-| Robot Framework    | Framework d'automatisation   |
-| SeleniumLibrary    | Automatisation des tests Web |
-| Google Chrome      | Navigateur de test           |
-| ChromeDriver       | Pilotage du navigateur       |
-| GitHub             | Gestion de versions          |
-| Jenkins            | Intégration Continue         |
-| Antigravity IDE    | Développement                |
-
+| Technologie | Rôle |
+| --- | --- |
+| Python | Exécuter Robot Framework. |
+| Robot Framework | Écrire et exécuter les scénarios de test. |
+| SeleniumLibrary | Piloter le navigateur Web. |
+| Google Chrome | Navigateur de test. |
+| ChromeDriver | Permettre à Selenium de piloter Chrome. |
+| GitHub | Versionner et partager le projet. |
+| Jenkins | Lancer les tests en intégration continue. |
+| Visual Studio Code | Éditer les fichiers du projet. |
 
 ## Architecture
 
 ```text
-Projet fin de bloc B/
+PFB-B/
 │
 ├── tests/
-├── resources/
-│   ├── pages/
-│   ├── variables.robot
-│   └── common_keywords.robot
+│   ├── Smoke/
+│   │   └── smoke_connexion.robot
+│   ├── US07_demande_reservation.robot
+│   └── US08_traiter_demande_reservation.robot
 │
-├── results/
-├── README.md
-├── requirements.txt
+├── resources/
+│   ├── pages/                      # Un fichier par page du périmètre
+│   ├── common_keywords.robot       # Actions communes
+│   └── variables.robot             # Données de test centralisées
+│
+├── documentation/
+│   ├── matrice_couverture_tests.md
+│   └── reconciliation_pfb_a_pfb_b.md
+│
+├── results/                        # Rapports générés, ignorés par Git
 ├── Jenkinsfile
-└── .gitignore
+├── requirements.txt
+├── .gitignore
+└── README.md
 ```
 
-## Architecture des tests
-
-Le projet est organisé selon le modèle **Page Object Model (POM)**.
-
-Cette architecture permet de séparer :
-- les scénarios de test ;
-- les actions réalisées sur les pages ;
-- les variables et données de test.
+Les scénarios se trouvent dans `tests/`. Ils appellent des mots-clés métiers présents dans `resources/pages/`, sans contenir de sélecteurs techniques. Cette séparation rend les tests plus lisibles et plus faciles à maintenir.
 
 ## Prérequis
 
-- Python 3.11
-- Google Chrome
-- ChromeDriver
-- Robot Framework
-- Connexion Internet
+- Python 3.11 ;
+- Google Chrome et ChromeDriver ;
+- Java, uniquement pour lancer Jenkins en local ;
+- une connexion Internet vers l'environnement Homey et GitHub.
 
-## Installation
+## Installation locale
 
-```bash
+```powershell
 git clone https://github.com/Jo-QA/PFB-B.git
 cd PFB-B
-pip install -r requirements.txt
+python -m venv .venv
+.\.venv\Scripts\activate
+python -m pip install -r requirements.txt
 ```
 
-## Exécution des tests
+L'environnement virtuel `.venv` isole les dépendances du projet. Il évite qu'une version installée pour un autre projet modifie les résultats.
 
-robot --include P1 --exclude anomalie_connue --outputdir results tests/
-robot --include P1 --include P2 --exclude anomalie_connue --outputdir results tests/
-robot --include anomalie_connue --outputdir results tests/
+## Exécuter les tests localement
+
+```powershell
+# Contrôles P1 hors anomalies connues
+python -m robot --include P1 --exclude anomalie_connue --outputdir results tests/
+
+# Contrôles P1 et P2 hors anomalies connues
+python -m robot --include P1 --include P2 --exclude anomalie_connue --outputdir results tests/
+
+# Démonstration des anomalies connues
+python -m robot --include anomalie_connue --outputdir results tests/
+```
+
+Les scénarios P2 qui créent une réservation demandent des dates libres. Les anomalies connues sont volontairement isolées : elles démontrent un écart au cahier des charges sans faire échouer le pipeline quotidien.
+
+## Lancer Jenkins en local
+
+Le fichier `jenkins.war` est stocké dans `C:\Users\meuni\OneDrive\Formation QA\Jenkins`.
+
+1. Ouvrir un terminal dans ce dossier.
+2. Lancer Jenkins avec la commande suivante :
+
+   ```powershell
+   java -jar jenkins.war
+   ```
+
+3. Ouvrir l'adresse indiquée dans le terminal, généralement [http://localhost:8080](http://localhost:8080).
+4. Dans le tableau de bord Jenkins, ouvrir le job `Pipeline-tests-automatises-PFB-B`.
+
+Le terminal doit rester ouvert pendant l'utilisation de Jenkins et l'exécution des builds. Le fermer arrête Jenkins ; l'interface locale et les tests en cours ne sont alors plus disponibles.
 
 ## Intégration continue avec Jenkins
 
-Le projet est exécuté automatiquement par le job Jenkins **Pipeline-tests-automatises-PFB-B**.
+Le job Jenkins récupère la dernière version du dépôt GitHub, crée un environnement Python dédié, installe les dépendances, exécute Robot Framework et archive les rapports.
 
-Le pipeline suit les étapes suivantes :
+Par défaut, il lance les P1 hors anomalies connues : le smoke test de connexion et le contrôle d'accès US07. Lorsqu'un nouveau commit est détecté sur GitHub, Jenkins lance automatiquement ce contrôle rapide.
 
-1. Jenkins récupère la dernière version du projet sur GitHub.
-2. Il crée un environnement Python dédié et installe les dépendances.
-3. Il exécute par défaut les tests P1 non concernés par une anomalie connue.
-4. Il publie les rapports de test et les conserve en pièces jointes du build.
+Le paramètre `EXECUTER_TESTS_P2` ajoute les contrôles P2 et le parcours nominal complet. Il doit être activé après avoir préparé des dates libres, car ce parcours crée une demande, enregistre un profil bancaire fictif et marque une réservation comme payée.
 
-Jenkins vérifie GitHub chaque minute. Lorsqu'un nouveau commit est détecté, un build est lancé automatiquement. Une modification enregistrée uniquement dans VS Code ne déclenche donc pas le pipeline : elle doit d'abord être validée puis envoyée sur GitHub avec un commit et un push.
-
-Le fichier `Jenkinsfile`, présent à la racine du dépôt, décrit ce pipeline. Le versionner avec le projet permet de garder la configuration d'intégration continue lisible, reproductible et traçable.
-
-Le paramètre Jenkins **EXECUTER_TESTS_P2** ajoute les contrôles P2 et le parcours nominal complet. Il doit être activé après avoir préparé des dates libres, car ce parcours crée une demande, enregistre un profil bancaire fictif et marque une réservation comme payée. Les anomalies connues restent exclues du pipeline afin qu'un défaut identifié ne fasse pas échouer chaque build.
+Une modification enregistrée seulement dans Visual Studio Code ne déclenche pas Jenkins. Elle doit être enregistrée dans Git, puis envoyée sur GitHub avec un commit et un push.
 
 ## Résultats
 
-Les rapports générés après chaque exécution sont disponibles dans le dossier results/ :
+Chaque exécution génère les fichiers suivants dans `results/` :
 
-- **report.html** : résumé des tests exécutés.
-- **log.html** : détail de chaque étape.
-- **output.xml** : résultats XML utilisés par Jenkins.
+| Fichier | Contenu |
+| --- | --- |
+| `report.html` | Résumé des tests exécutés. |
+| `log.html` | Détail de chaque étape. |
+| `output.xml` | Résultat XML exploité par Jenkins. |
 
-Dans Jenkins, le lien **Robot Results** d'un build permet de consulter la synthèse des tests, tandis que les fichiers `report.html` et `log.html` sont disponibles dans les artefacts archivés.
+Dans Jenkins, le lien **Robot Results** affiche une synthèse. Les fichiers HTML sont aussi disponibles dans les artefacts du build.
 
 ## Auteur
 
 Jonathan Meunier
-Projet réalisé dans le cadre de la préparation au titre professionnel RNCP41887 – Testeur Logiciel.
 
-## Informations du projet
+Projet réalisé dans le cadre de la préparation au titre professionnel RNCP41887 — Testeur Logiciel.
 
 Version : 1.0.0
 
-Dernière mise à jour : juillet 2026
+Dernière mise à jour : août 2026

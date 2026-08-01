@@ -1,17 +1,15 @@
 # ============================================================
-# Projet de Fin de Bloc B - Homey
-# Mots-clés communs
+# Projet de Fin de Bloc B — Homey
+# Mots-clés communs à tous les scénarios
 # ============================================================
-
 
 *** Settings ***
 
-Library    SeleniumLibrary
+Library     SeleniumLibrary
 
 Resource    variables.robot
 Resource    pages/modal_connexion.robot
 Resource    pages/page_accueil.robot
-
 
 *** Keywords ***
 

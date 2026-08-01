@@ -1,28 +1,26 @@
 # ============================================================
-# Projet de Fin de Bloc B - Homey
-# US-08 - Traiter une demande de réservation
+# Projet de Fin de Bloc B — Homey
+# US08 — Traiter une demande de réservation
 # ============================================================
-
 
 *** Settings ***
 
-Documentation       US-08 : L'hôte confirme une demande de réservation.
+Documentation     Vérifie le traitement d'une demande par l'hôte, du profil de paiement au statut final.
 
-Resource            ../resources/variables.robot
-Resource            ../resources/common_keywords.robot
-Resource            ../resources/pages/page_annonce.robot
-Resource            ../resources/pages/page_profil_paiement.robot
-Resource            ../resources/pages/page_reservations.robot
+Resource          ../resources/variables.robot
+Resource          ../resources/common_keywords.robot
+Resource          ../resources/pages/page_annonce.robot
+Resource          ../resources/pages/page_profil_paiement.robot
+Resource          ../resources/pages/page_reservations.robot
 
-Test Setup          Ouvrir l'application
-Test Teardown       Fermer l'application
-Test Tags           US08    reservation    hote
-
+Test Setup        Ouvrir l'application
+Test Teardown     Fermer l'application
+Test Tags         US08    reservation    hote
 
 *** Test Cases ***
 
-P1 - Le paiement doit être bloqué si l'hôte ne possède pas de profil de paiement
-    [Documentation]    US08-CT09 / HOMEY-25 et HOMEY-38. La sécurité du paiement est P1. Précondition : HoteID1 ne possède pas de profil de paiement.
+P1 - Le paiement doit être bloqué sans profil de paiement hôte
+    [Documentation]    US08-CT08 / HOMEY-25 et HOMEY-38. Précondition : HoteID1 ne possède pas de profil de paiement.
     [Tags]    P1    anomalie_connue    etat_mutable
     Se connecter avec un compte valide    ${UTILISATEUR_LOGIN}    ${UTILISATEUR_PASSWORD}
     Ouvrir l'annonce de l'hôte de test
@@ -38,8 +36,8 @@ P1 - Le paiement doit être bloqué si l'hôte ne possède pas de profil de paie
     Ouvrir le détail d'une réservation au paiement en attente    ${DATE_DEBUT_SECURITE_PAIEMENT}
     Le paiement doit être bloqué sans profil hôte
 
-P2 - L'hôte doit pouvoir configurer son profil de paiement par virement
-    [Documentation]    US08-CT07 / HOMEY-31. Le formulaire bancaire apparaît après le choix du virement et les données de test sont enregistrées.
+P2 - L'hôte doit pouvoir configurer un virement bancaire de test
+    [Documentation]    US08-CT07 / HOMEY-31. Le formulaire s'affiche après le choix du virement et les données fictives sont enregistrées.
     [Tags]    P2    profil_paiement    etat_mutable
     Se connecter avec un compte valide    ${HOTE_LOGIN}    ${HOTE_PASSWORD}
     Ouvrir le profil de paiement
@@ -47,7 +45,7 @@ P2 - L'hôte doit pouvoir configurer son profil de paiement par virement
     Les champs du virement bancaire doivent être affichés
 
 P2 - Une réservation doit atteindre le statut réservé après paiement
-    [Documentation]    US08-CT01 / HOMEY-23. Le parcours nominal complet passe de NOUVEAU à PAIEMENT EN ATTENTE, puis à RESERVE après le paiement.
+    [Documentation]    US08-CT01 / HOMEY-23. Le parcours passe de NOUVEAU à PAIEMENT EN ATTENTE, puis à RÉSERVÉ après le paiement.
     [Tags]    P2    connecte    happy_path    etat_mutable
     Se connecter avec un compte valide    ${UTILISATEUR_LOGIN}    ${UTILISATEUR_PASSWORD}
     Ouvrir l'annonce de l'hôte de test

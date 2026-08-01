@@ -11,7 +11,7 @@ Ce tableau fait le lien entre chaque preuve manuelle et sa décision PFB B. Il �
 | HOMEY-5 | Demande complète avec tous les champs valides. | Échec | P1 | Automatisé dans `US07_demande_reservation.robot` : le champ message exigé est absent, écart rejoué et confirmé le 30/07/2026. |
 | HOMEY-6 | Demande non transmise sans connexion. | Échec | P1 | Automatisé dans `US07_demande_reservation.robot`. |
 | HOMEY-7 | Date de début vide. | Échec | P2 | Automatisé : arrivée imposée avant départ. |
-| HOMEY-8 | Date de début passée. | Échec | P2 | Automatisé : les jours passés sont indisponibles. |
+| HOMEY-8 | Date de début passée. | Échec | P2 | Automatisé : la navigation vers le mois précédent est désactivée, ce qui empêche de sélectionner une date passée. |
 | HOMEY-10 | Date de fin vide. | Échec initial | P2 | Revalidé pendant le PFB B : Homey bloque la demande avec un message de validation ; automatisé. |
 | HOMEY-11 | Date de fin égale ou antérieure. | Échec initial | P2 | Revalidé pendant le PFB B : Homey bloque une deuxième date antérieure avec un message de validation ; automatisé. |
 | HOMEY-13 | Nombre de voyageurs vide. | Échec initial | P2 | Revalidé pendant le PFB B : Homey bloque la demande avec le message voyageur requis ; automatisé. |
