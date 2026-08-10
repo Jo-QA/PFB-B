@@ -1,5 +1,5 @@
 # ============================================================
-# Projet de Fin de Bloc B — Homey
+# Projet de Fin de Bloc B — Application Homey
 # Page Object — Page d'accueil
 # ============================================================
 
